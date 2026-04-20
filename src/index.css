@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-light: #334155;
+  --color-accent: #3b82f6;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Courier New", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-[#f8fafc] font-sans antialiased;
+  }
+}
+
+.stat-label {
+  @apply text-[11px] uppercase tracking-wider text-[#94a3b8] font-semibold mb-1;
+}
+
+.stat-value {
+  @apply text-2xl font-bold font-mono;
+}
+
+.sleek-card {
+  @apply bg-surface border border-surface-light rounded-xl p-4 shadow-sm;
+}
