@@ -6,7 +6,7 @@
   "scripts": {
    "dev": "node --import tsx/esm server.ts",
   "build": "vite build && tsc server.ts --outDir dist/server --module commonjs --esModuleInterop --skipLibCheck",
-  "start": "node dist/server/server.js",
+  "start": "node dist/server/server.cjs",
   "preview": "vite preview",
   "clean": "rm -rf dist",
   "lint": "tsc --noEmit" 
