@@ -1,5 +1,4 @@
 import { CalculatedBlock, Service } from "../types";
-import { addSeconds } from "date-fns";
 
 /**
  * La joya de la corona: la lógica de recalculo.
@@ -7,9 +6,28 @@ import { addSeconds } from "date-fns";
  * basándose en los tiempos reales ya registrados.
  */
 export function recalculateSchedules(service: Service): CalculatedBlock[] {
-  let currentTime = service.actualStartTime || service.plannedStartTime;
-  // Calculamos el retraso inicial (positivo = tarde, negativo = temprano)
-  let cumulativeDelayMs = service.actualStartTime ? service.actualStartTime - service.plannedStartTime : 0;
+  if (!service.actualStartTime) {
+    // Servicio no iniciado - solo proyectar desde plannedStartTime
+    let currentTime = service.plannedStartTime;
+    return service.blocks.sort((a, b) => a.order - b.order).map((block) => {
+      const startTime = currentTime;
+      const endTime = startTime + (block.plannedDuration * 1000);
+      currentTime = endTime;
+      return {
+        ...block,
+        expectedStartTime: startTime,
+        expectedEndTime: endTime,
+        delaySeconds: 0,
+      };
+    });
+  }
+
+  // Servicio iniciado - calcular delay real
+  // Delay inicial = diferencia entre inicio real y planeado
+  const initialDelayMs = service.actualStartTime - service.plannedStartTime;
+  
+  let cumulativeDelayMs = initialDelayMs;
+  let currentTime = service.actualStartTime;
 
   return service.blocks.sort((a, b) => a.order - b.order).map((block) => {
     if (block.status === "SKIPPED") {
@@ -21,29 +39,29 @@ export function recalculateSchedules(service: Service): CalculatedBlock[] {
       };
     }
 
-    // Si el bloque ya está LIVE o DONE, usamos su inicio real. Si no, usamos el currentTime proyectado.
-    const startTime = (block.status === "LIVE" || block.status === "DONE") 
-      ? (block.actualStartTime || currentTime) 
+    // Para bloques LIVE o DONE usamos el tiempo real de inicio
+    const startTime = (block.status === "LIVE" || block.status === "DONE")
+      ? (block.actualStartTime || currentTime)
       : currentTime;
-    
-    // Si el bloque empezó en una hora distinta a la proyectada, el delay acumulado cambia
-    if (block.actualStartTime && (block.status === "LIVE" || block.status === "DONE")) {
-       // Solo ajustamos el delay acumulado si el servicio ya ha empezado oficialmente
-       const drift = block.actualStartTime - currentTime;
-       cumulativeDelayMs += drift;
+
+    // Si el bloque real empezó diferente al proyectado, acumular esa diferencia
+    if ((block.status === "LIVE" || block.status === "DONE") && block.actualStartTime) {
+      cumulativeDelayMs = block.actualStartTime - service.plannedStartTime;
+      // Restar la duración acumulada de bloques anteriores planeados
+      const previousPlannedMs = service.blocks
+        .filter(b => b.order < block.order)
+        .reduce((acc, b) => acc + b.plannedDuration * 1000, 0);
+      cumulativeDelayMs -= previousPlannedMs;
     }
 
     const durationToUse = block.actualDuration || block.plannedDuration;
-    
-    // Si el bloque terminó y duró distinto a lo planeado, se suma al delay
-    if (block.status === "DONE" && block.actualDuration) {
-      const diff = (block.actualDuration - block.plannedDuration) * 1000;
-      cumulativeDelayMs += diff;
-    }
+    const endTime = startTime + (durationToUse * 1000);
 
-    const endTime = (block.status === "DONE") 
-      ? (block.actualStartTime ? addSeconds(new Date(block.actualStartTime), durationToUse).getTime() : startTime + (durationToUse * 1000))
-      : addSeconds(new Date(startTime), durationToUse).getTime();
+    // Si el bloque terminó más largo que lo planeado, añadir al delay
+    if (block.status === "DONE" && block.actualDuration) {
+      const overrun = (block.actualDuration - block.plannedDuration) * 1000;
+      cumulativeDelayMs += overrun;
+    }
 
     const calculatedBlock: CalculatedBlock = {
       ...block,
