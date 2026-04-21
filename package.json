@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "tsc && vite build",
-    "start": "node dist/server.cjs",
-    "preview": "vite preview",
-    "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+   "dev": "node --import tsx/esm server.ts",
+  "build": "vite build && tsc server.ts --outDir dist/server --module commonjs --esModuleInterop --skipLibCheck",
+  "start": "node dist/server/server.js",
+  "preview": "vite preview",
+  "clean": "rm -rf dist",
+  "lint": "tsc --noEmit" 
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
