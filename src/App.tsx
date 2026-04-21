@@ -75,19 +75,19 @@ export default function App() {
 
         <div className="flex items-center gap-8">
            <div className="flex flex-col items-center">
-             <div className="text-[10px] text-text-muted font-bold tracking-[0.2em] uppercase leading-none mb-1">Hora Local</div>
-             <div className="font-mono text-xl font-bold text-white tracking-widest">{formatTime(now)}</div>
+             <div className="text-[9px] lg:text-[10px] text-text-muted font-bold tracking-[0.1em] lg:tracking-[0.2em] uppercase leading-none mb-1">Hora Local</div>
+             <div className="font-mono text-base lg:text-xl font-bold text-white tracking-widest">{formatTime(now)}</div>
            </div>
            
            <div className="h-10 w-[1px] bg-surface-light" />
 
            <div className={cn(
-             "h-[32px] border text-[12px] font-black px-4 rounded-lg flex items-center gap-2 uppercase tracking-tight transition-colors shadow-2xl",
+             "h-[28px] lg:h-[32px] border text-[10px] lg:text-[12px] font-black px-2 lg:px-4 rounded-lg flex items-center gap-2 uppercase tracking-tight transition-colors shadow-2xl",
              totalDelaySeconds > 0 ? "bg-danger text-white border-danger shadow-danger/20" : 
              totalDelaySeconds < 0 ? "bg-success text-white border-success shadow-success/20" :
              "bg-surface-light text-text-muted border-surface-light"
            )}>
-             {service.status === 'live' ? `RETRASO: ${formatDelay(totalDelaySeconds)}` : "STANDBY"}
+             <span className="hidden sm:inline">RETRASO:</span> {formatDelay(totalDelaySeconds)}
            </div>
         </div>
       </header>
@@ -183,48 +183,48 @@ export default function App() {
           ) : (
             /* --- LIVE MODE VIEW --- */
             <section className="flex flex-col flex-grow overflow-hidden gap-6">
-               <div className="grid grid-cols-4 gap-4 shrink-0">
-                  <div className="sleek-card flex items-center justify-between">
+               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 shrink-0">
+                  <div className="sleek-card flex items-center justify-between p-3 lg:p-4">
                     <div>
                       <div className="stat-label">Hora Programada</div>
-                      <div className="stat-value text-text-muted">{formatTime(service.plannedStartTime)}</div>
+                      <div className="stat-value text-sm lg:text-base text-text-muted">{formatTime(service.plannedStartTime)}</div>
                     </div>
-                    <Clock className="w-8 h-8 text-text-muted/20" />
+                    <Clock className="w-5 h-5 lg:w-8 lg:h-8 text-text-muted/20" />
                   </div>
 
-                  <div className="sleek-card flex items-center justify-between">
+                  <div className="sleek-card flex items-center justify-between p-3 lg:p-4">
                     <div>
                       <div className="stat-label">Inicio Real</div>
-                      <div className="stat-value text-accent">{service.actualStartTime ? formatTime(service.actualStartTime) : "--:--:--"}</div>
+                      <div className="stat-value text-sm lg:text-base text-accent">{service.actualStartTime ? formatTime(service.actualStartTime) : "--:--:--"}</div>
                     </div>
-                    <Clock className="w-8 h-8 text-accent/20" />
+                    <Clock className="w-5 h-5 lg:w-8 lg:h-8 text-accent/20" />
                   </div>
 
-                  <div className={cn("sleek-card flex items-center justify-between transition-colors", isOvertime ? "bg-danger/10 border-danger/30" : "")}>
+                  <div className={cn("sleek-card flex items-center justify-between transition-colors p-3 lg:p-4", isOvertime ? "bg-danger/10 border-danger/30" : "")}>
                     <div>
-                      <div className={cn("stat-label", isOvertime ? "text-danger" : "")}>Tiempo en Bloque</div>
-                      <div className={cn("stat-value", isOvertime ? "text-danger" : "text-white")}>
+                      <div className={cn("stat-label text-[10px] break-words", isOvertime ? "text-danger" : "")}>Tiempo en Bloque</div>
+                      <div className={cn("stat-value text-sm lg:text-base", isOvertime ? "text-danger" : "text-white")}>
                         {formatDuration(elapsedInBlock)}
                       </div>
                     </div>
-                    {isOvertime ? <AlertTriangle className="w-8 h-8 text-danger animate-pulse" /> : <Clock className="w-8 h-8 text-white/10" />}
+                    {isOvertime ? <AlertTriangle className="w-5 h-5 lg:w-8 lg:h-8 text-danger animate-pulse" /> : <Clock className="w-5 h-5 lg:w-8 lg:h-8 text-white/10" />}
                   </div>
 
-                  <div className="sleek-card flex items-center justify-between">
+                  <div className="sleek-card flex items-center justify-between p-3 lg:p-4">
                     <div>
                       <div className="stat-label text-warning">Fin Estimado</div>
-                      <div className="stat-value text-warning">{lastBlock ? formatTime(lastBlock.expectedEndTime) : "--:--:--"}</div>
+                      <div className="stat-value text-sm lg:text-base text-warning">{lastBlock ? formatTime(lastBlock.expectedEndTime) : "--:--:--"}</div>
                     </div>
-                    <ChevronRight className="w-8 h-8 text-warning/20" />
+                    <ChevronRight className="w-5 h-5 lg:w-8 lg:h-8 text-warning/20" />
                   </div>
                </div>
 
                <div className="bg-surface border border-surface-light rounded-xl flex flex-col flex-grow overflow-hidden shadow-2xl">
-                 <div className="grid grid-cols-[80px_1fr_100px_100px_100px] gap-4 px-6 py-3 border-b border-surface-light bg-black/10 text-[10px] font-bold text-text-muted uppercase tracking-widest shrink-0">
+                 <div className="grid grid-cols-[65px_1fr_75px] lg:grid-cols-[80px_1fr_100px_100px_100px] gap-4 px-6 py-3 border-b border-surface-light bg-black/10 text-[10px] font-bold text-text-muted uppercase tracking-widest shrink-0">
                     <div>Hora</div>
                     <div>Bloque / Responsable</div>
-                    <div className="text-center">Planeado</div>
-                    <div className="text-center">Restante</div>
+                    <div className="hidden lg:block text-center">Planeado</div>
+                    <div className="hidden lg:block text-center">Restante</div>
                     <div className="text-right">Estado</div>
                  </div>
 
@@ -235,13 +235,13 @@ export default function App() {
                           layout
                           key={block.id}
                           className={cn(
-                            "grid grid-cols-[80px_1fr_100px_100px_100px] gap-4 px-6 py-4 border-b border-surface-light/30 items-center relative transition-all",
+                            "grid grid-cols-[65px_1fr_75px] lg:grid-cols-[80px_1fr_100px_100px_100px] gap-4 px-3 py-3 lg:px-6 lg:py-4 border-b border-surface-light/30 items-center relative transition-all",
                             block.status === "LIVE" ? "bg-accent/5 border-l-4 border-l-accent" : "",
                             block.status === "DONE" || block.status === "SKIPPED" ? "opacity-30" : ""
                           )}
                         >
-                          <div className="font-mono text-sm">
-                            <span className="text-[10px] block opacity-50 font-normal leading-none mb-1">
+                          <div className="font-mono text-xs lg:text-sm">
+                            <span className="text-[9px] lg:text-[10px] block opacity-50 font-normal leading-none mb-1">
                               {block.status === "DONE" ? "REAL" : "PROY"}
                             </span>
                             <span className={cn(block.delaySeconds !== 0 && block.status !== "DONE" ? (block.delaySeconds > 0 ? "text-danger" : "text-success") : "")}>
@@ -249,17 +249,17 @@ export default function App() {
                             </span>
                           </div>
 
-                          <div>
-                            <div className="text-[15px] font-bold">{block.title}</div>
-                            <div className="text-[11px] text-text-muted uppercase tracking-wide">{block.responsible}</div>
+                          <div className="min-w-0">
+                            <div className="text-sm lg:text-[15px] font-bold truncate">{block.title}</div>
+                            <div className="text-[10px] lg:text-[11px] text-text-muted uppercase tracking-wide truncate">{block.responsible}</div>
                           </div>
 
-                          <div className="text-center font-mono text-sm opacity-60">
+                          <div className="hidden lg:block text-center font-mono text-sm opacity-60">
                             {formatDuration(block.plannedDuration)}
                           </div>
 
                           <div className={cn(
-                             "text-center font-mono font-bold text-sm",
+                             "hidden lg:block text-center font-mono font-bold text-sm",
                              block.status === "LIVE" && elapsedInBlock > block.plannedDuration ? "text-danger" : "text-white/80"
                           )}>
                              {block.status === "LIVE" ? (
@@ -271,13 +271,17 @@ export default function App() {
 
                           <div className="text-right">
                              <span className={cn(
-                               "text-[10px] font-bold px-2 py-0.5 rounded-full",
+                               "text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center justify-center min-w-[20px] lg:min-w-0",
                                block.status === "LIVE" ? "bg-accent text-white animate-pulse" :
                                block.status === "DONE" ? "bg-success/20 text-success border border-success/30" :
                                block.status === "SKIPPED" ? "bg-slate-700 text-slate-400" :
                                "bg-slate-800 text-slate-500"
                              )}>
-                               {block.status}
+                               <span className="hidden lg:inline">{block.status}</span>
+                               <span className={cn(
+                                 "lg:hidden w-2 h-2 rounded-full",
+                                 block.status === "LIVE" ? "bg-white" : "bg-current"
+                               )} />
                              </span>
                           </div>
                         </motion.div>
@@ -372,4 +376,3 @@ export default function App() {
     </div>
   );
 }
-
