@@ -111,12 +111,15 @@ export default function App() {
                   <input 
                     type="time" 
                     className="bg-transparent border-none font-mono font-bold text-accent focus:ring-0"
-                    defaultValue={format(service.plannedStartTime, "HH:mm")}
-                    onChange={(e) => {
-                      const [h, m] = e.target.value.split(':');
+                    defaultValue={(() => {
                       const d = new Date(service.plannedStartTime);
-                      d.setHours(parseInt(h), parseInt(m), 0, 0);
-                      updatePlannedStart(d.getTime());
+                      return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+                    })()}
+                    onChange={(e) => {
+                      const [h, m] = e.target.value.split(':').map(Number);
+                      const now = new Date();
+                      now.setHours(h, m, 0, 0);
+                      updatePlannedStart(now.getTime());
                     }}
                   />
                 </div>
@@ -370,11 +373,3 @@ export default function App() {
   );
 }
 
-// Helper to format Date for input
-function format(timestamp: number, fmt: string) {
-  const d = new Date(timestamp);
-  if (fmt === "HH:mm") {
-    return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
-  }
-  return d.toISOString();
-}
