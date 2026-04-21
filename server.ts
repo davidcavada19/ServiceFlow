@@ -20,11 +20,7 @@ async function startServer() {
     id: "1",
     name: "Servicio General",
     status: "scheduled", 
-    plannedStartTime: (() => {
-      const d = new Date();
-      d.setHours(10, 0, 0, 0);
-      return d.getTime();
-    })(),
+    plannedStartTime: Date.now(),
     actualStartTime: null as number | null,
     blocks: [
       { id: "b1", title: "Bienvenida", responsible: "Pastor", plannedDuration: 300, order: 0, status: "WAITING", actualStartTime: null, actualDuration: null },
@@ -159,3 +155,4 @@ async function startServer() {
 }
 
 startServer();
+
