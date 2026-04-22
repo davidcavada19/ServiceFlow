@@ -158,14 +158,33 @@ export default function App() {
                             onChange={(e) => updateBlock(block.id, { responsible: e.target.value } as any)}
                           />
                         </div>
-                        <div className="flex justify-center items-center gap-2">
-                          <input 
-                            type="number"
-                            className="bg-transparent border-none text-center font-mono font-bold text-accent w-16 focus:ring-1 focus:ring-accent rounded"
-                            value={Math.floor(block.plannedDuration / 60)}
-                            onChange={(e) => updateBlock(block.id, { plannedDuration: parseInt(e.target.value) * 60 } as any)}
-                          />
-                          <span className="text-[10px] text-text-muted uppercase">Min</span>
+                        <div className="flex justify-center items-center gap-1">
+                          <div className="flex items-center">
+                            <input 
+                              type="number"
+                              className="bg-transparent border-none text-right font-mono font-bold text-accent w-8 p-0 focus:ring-0 focus:ring-accent rounded"
+                              value={Math.floor(block.plannedDuration / 60)}
+                              onChange={(e) => {
+                                const mins = parseInt(e.target.value) || 0;
+                                const secs = block.plannedDuration % 60;
+                                updateBlock(block.id, { plannedDuration: mins * 60 + secs } as any);
+                              }}
+                            />
+                            <span className="text-[8px] text-text-muted uppercase ml-0.5">min</span>
+                          </div>
+                          <div className="flex items-center">
+                            <input 
+                              type="number"
+                              className="bg-transparent border-none text-right font-mono font-bold text-accent w-8 p-0 focus:ring-0 focus:ring-accent rounded"
+                              value={block.plannedDuration % 60}
+                              onChange={(e) => {
+                                const mins = Math.floor(block.plannedDuration / 60);
+                                const secs = parseInt(e.target.value) || 0;
+                                updateBlock(block.id, { plannedDuration: mins * 60 + secs } as any);
+                              }}
+                            />
+                            <span className="text-[8px] text-text-muted uppercase ml-0.5">seg</span>
+                          </div>
                         </div>
                         <button 
                           onClick={() => deleteBlock(block.id)}
@@ -226,9 +245,10 @@ export default function App() {
                </div>
 
                <div className="bg-surface border border-surface-light rounded-xl flex flex-col flex-grow overflow-hidden shadow-2xl">
-                 <div className="grid grid-cols-[65px_1fr_75px] lg:grid-cols-[80px_1fr_100px_100px_100px] gap-4 px-6 py-3 border-b border-surface-light bg-black/10 text-[10px] font-bold text-text-muted uppercase tracking-widest shrink-0">
+                 <div className="grid grid-cols-[65px_1fr_75px] lg:grid-cols-[80px_1fr_1fr_100px_100px_100px] gap-4 px-6 py-3 border-b border-surface-light bg-black/10 text-[10px] font-bold text-text-muted uppercase tracking-widest shrink-0">
                     <div>Hora</div>
-                    <div>Bloque / Responsable</div>
+                    <div>Bloque</div>
+                    <div className="hidden lg:block">Responsable</div>
                     <div className="hidden lg:block text-center">Planeado</div>
                     <div className="hidden lg:block text-center">Restante</div>
                     <div className="text-right">Estado</div>
@@ -241,7 +261,7 @@ export default function App() {
                           layout
                           key={block.id}
                           className={cn(
-                            "grid grid-cols-[65px_1fr_75px] lg:grid-cols-[80px_1fr_100px_100px_100px] gap-4 px-3 py-3 lg:px-6 lg:py-4 border-b border-surface-light/30 items-center relative transition-all",
+                            "grid grid-cols-[65px_1fr_75px] lg:grid-cols-[80px_1fr_1fr_100px_100px_100px] gap-4 px-3 py-3 lg:px-6 lg:py-4 border-b border-surface-light/30 items-center relative transition-all",
                             block.status === "LIVE" ? "bg-accent/5 border-l-4 border-l-accent" : "",
                             block.status === "DONE" || block.status === "SKIPPED" ? "opacity-30" : ""
                           )}
@@ -257,7 +277,11 @@ export default function App() {
 
                           <div className="min-w-0">
                             <div className="text-sm lg:text-[15px] font-bold truncate">{block.title}</div>
-                            <div className="text-[10px] lg:text-[11px] text-text-muted uppercase tracking-wide truncate">{block.responsible}</div>
+                            <div className="lg:hidden text-[10px] text-text-muted uppercase tracking-wide truncate">{block.responsible}</div>
+                          </div>
+
+                          <div className="hidden lg:block min-w-0 text-[11px] text-text-muted uppercase tracking-wide truncate">
+                            {block.responsible}
                           </div>
 
                           <div className="hidden lg:block text-center font-mono text-sm opacity-60">
@@ -374,7 +398,7 @@ export default function App() {
               onClick={resetService}
               className="mt-auto pt-6 flex items-center justify-center gap-2 text-[10px] font-bold text-text-muted hover:text-danger transition-colors uppercase tracking-widest"
              >
-                <RotateCcw className="w-3 h-3" /> Factory Reset
+                <RotateCcw className="w-3 h-3" /> Reiniciar
              </button>
           </div>
         </aside>
