@@ -20,7 +20,7 @@
 }
 
 .stat-label {
-  @apply text-[11px] uppercase tracking-wider text-[#94a3b8] font-semibold mb-1;
+  @apply text-[11px] tracking-wider text-[#94a3b8] font-semibold mb-1;
 }
 
 .stat-value {
