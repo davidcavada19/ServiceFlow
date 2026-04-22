@@ -73,7 +73,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-3 sm:gap-8">
            <div className="flex flex-col items-center">
              <div className="text-[9px] lg:text-[10px] text-text-muted font-bold tracking-[0.1em] lg:tracking-[0.2em] uppercase leading-none mb-1">Hora Local</div>
              <div className="font-mono text-base lg:text-xl font-bold text-white tracking-widest">{formatTime(now)}</div>
@@ -82,7 +82,7 @@ export default function App() {
            <div className="h-10 w-[1px] bg-surface-light" />
 
            <div className={cn(
-             "h-[28px] lg:h-[32px] border text-[10px] lg:text-[12px] font-black px-1.5 lg:px-4 mr-1 lg:mr-0 rounded-lg flex items-center gap-2 uppercase tracking-tight transition-colors shadow-2xl",
+             "h-[28px] lg:h-[32px] border text-[10px] lg:text-[12px] font-black px-1.5 lg:px-4 mr-2 sm:mr-0 rounded-lg flex items-center gap-2 uppercase tracking-tight transition-colors shadow-2xl",
              totalDelaySeconds > 0 ? "bg-danger text-white border-danger shadow-danger/20" : 
              totalDelaySeconds < 0 ? "bg-success text-white border-success shadow-success/20" :
              "bg-surface-light text-text-muted border-surface-light"
