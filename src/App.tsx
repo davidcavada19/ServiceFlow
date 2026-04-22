@@ -82,7 +82,7 @@ export default function App() {
            <div className="h-10 w-[1px] bg-surface-light" />
 
            <div className={cn(
-             "h-[28px] lg:h-[32px] border text-[10px] lg:text-[12px] font-black px-2 lg:px-4 rounded-lg flex items-center gap-2 uppercase tracking-tight transition-colors shadow-2xl",
+             "h-[28px] lg:h-[32px] border text-[10px] lg:text-[12px] font-black px-1.5 lg:px-4 mr-1 lg:mr-0 rounded-lg flex items-center gap-2 uppercase tracking-tight transition-colors shadow-2xl",
              totalDelaySeconds > 0 ? "bg-danger text-white border-danger shadow-danger/20" : 
              totalDelaySeconds < 0 ? "bg-success text-white border-success shadow-success/20" :
              "bg-surface-light text-text-muted border-surface-light"
@@ -142,6 +142,9 @@ export default function App() {
                         <input 
                           className="bg-transparent border-none text-[15px] font-bold focus:ring-1 focus:ring-accent rounded px-2"
                           value={block.title}
+                          autoCapitalize="none"
+                          autoCorrect="off"
+                          spellCheck={false}
                           onChange={(e) => updateBlock(block.id, { title: e.target.value } as any)}
                         />
                         <div className="flex items-center gap-2">
@@ -149,6 +152,9 @@ export default function App() {
                           <input 
                             className="bg-transparent border-none text-[13px] text-text-muted focus:ring-1 focus:ring-accent rounded px-2 w-full"
                             value={block.responsible}
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            spellCheck={false}
                             onChange={(e) => updateBlock(block.id, { responsible: e.target.value } as any)}
                           />
                         </div>
