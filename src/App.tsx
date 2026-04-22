@@ -49,7 +49,7 @@ export default function App() {
       {/* Sleek Header */}
       <header className="h-[64px] border-b border-surface-light bg-surface flex items-center justify-between px-6 shrink-0 shadow-lg">
         <div className="flex items-center gap-6">
-          <div className="font-extrabold text-xl tracking-tighter text-accent">SERVICEFLOW</div>
+          <div className="font-extrabold text-xs sm:text-xl tracking-tighter text-accent">SERVICEFLOW</div>
           
           <div className="flex bg-bg/50 p-1 rounded-lg border border-surface-light gap-1">
             <button 
@@ -59,7 +59,7 @@ export default function App() {
                 viewMode === 'edit' ? "bg-surface text-white shadow-sm" : "text-text-muted hover:text-white"
               )}
             >
-              <Settings2 className="w-3 h-3" /> Edit Mode
+              <Settings2 className="w-3 h-3" /> <span className="hidden sm:inline">Edit Mode</span>
             </button>
             <button 
               onClick={() => setViewMode('live')}
@@ -68,7 +68,7 @@ export default function App() {
                 viewMode === 'live' ? "bg-accent text-white shadow-sm" : "text-text-muted hover:text-white"
               )}
             >
-              <Zap className="w-3 h-3" /> Live Mode
+              <Zap className="w-3 h-3" /> <span className="hidden sm:inline">Live Mode</span>
             </button>
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function App() {
       </header>
 
       {/* Main Container */}
-      <div className="flex-grow overflow-hidden p-4 sm:p-6 flex flex-col-reverse lg:grid lg:grid-cols-[1fr_320px] gap-4 sm:gap-6">
+      <div className="flex-grow overflow-hidden p-4 sm:p-6 flex flex-col lg:grid lg:grid-cols-[1fr_320px] gap-4 sm:gap-6">
         
         {/* Working Area */}
         <div className="flex flex-col gap-6 overflow-hidden">
@@ -142,7 +142,6 @@ export default function App() {
                         <input 
                           className="bg-transparent border-none text-[15px] font-bold focus:ring-1 focus:ring-accent rounded px-2"
                           value={block.title}
-                          style={{ textTransform: 'none' }}
                           onChange={(e) => updateBlock(block.id, { title: e.target.value } as any)}
                         />
                         <div className="flex items-center gap-2">
@@ -150,7 +149,6 @@ export default function App() {
                           <input 
                             className="bg-transparent border-none text-[13px] text-text-muted focus:ring-1 focus:ring-accent rounded px-2 w-full"
                             value={block.responsible}
-                            style={{ textTransform: 'none' }}
                             onChange={(e) => updateBlock(block.id, { responsible: e.target.value } as any)}
                           />
                         </div>
@@ -159,7 +157,6 @@ export default function App() {
                             type="number"
                             className="bg-transparent border-none text-center font-mono font-bold text-accent w-16 focus:ring-1 focus:ring-accent rounded"
                             value={Math.floor(block.plannedDuration / 60)}
-                            style={{ textTransform: 'none' }}
                             onChange={(e) => updateBlock(block.id, { plannedDuration: parseInt(e.target.value) * 60 } as any)}
                           />
                           <span className="text-[10px] text-text-muted uppercase">Min</span>
@@ -376,6 +373,6 @@ export default function App() {
           </div>
         </aside>
       </div>
-</div>
+    </div>
   );
 }
